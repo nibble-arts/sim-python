@@ -4,16 +4,40 @@
 		"selected_items":
 		[
 			[
+				"def",
+				"def	Function"
+			],
+			[
+				"data",
+				"data"
+			],
+			[
+				"_dict",
+				"_dict2where"
+			],
+			[
+				"_",
+				"_metadata"
+			],
+			[
+				"key",
+				"keys"
+			],
+			[
+				"a",
+				"all"
+			],
+			[
+				"if",
+				"if	If Condition"
+			],
+			[
 				"date",
 				"DateTimeOriginal"
 			],
 			[
 				"Date",
 				"DateTimeOriginal"
-			],
-			[
-				"_",
-				"_getexif"
 			],
 			[
 				"exif",
@@ -26,10 +50,6 @@
 			[
 				"da",
 				"datenserver"
-			],
-			[
-				"data",
-				"database"
 			],
 			[
 				"field",
@@ -67,7 +87,15 @@
 			"file": "main.py",
 			"settings":
 			{
-				"buffer_size": 387,
+				"buffer_size": 501,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "module/database.py",
+			"settings":
+			{
+				"buffer_size": 3344,
 				"line_ending": "Unix"
 			}
 		},
@@ -75,7 +103,7 @@
 			"file": "module/scan.py",
 			"settings":
 			{
-				"buffer_size": 816,
+				"buffer_size": 1655,
 				"line_ending": "Unix"
 			}
 		},
@@ -83,15 +111,7 @@
 			"file": "module/media.py",
 			"settings":
 			{
-				"buffer_size": 1335,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/exif.py",
-			"settings":
-			{
-				"buffer_size": 864,
+				"buffer_size": 1773,
 				"line_ending": "Unix"
 			}
 		},
@@ -99,15 +119,7 @@
 			"file": "create/image.ini",
 			"settings":
 			{
-				"buffer_size": 455,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/__init__.py",
-			"settings":
-			{
-				"buffer_size": 44,
+				"buffer_size": 453,
 				"line_ending": "Unix"
 			}
 		}
@@ -136,12 +148,14 @@
 	},
 	"file_history":
 	[
-		"/home/tom/Entwicklung/SIM Python/module/__init__.py",
-		"/home/tom/Entwicklung/SIM Python/main.py",
+		"/home/tom/Entwicklung/SIM Python/module/exif.py",
 		"/home/tom/Entwicklung/SIM Python/module/scan.py",
+		"/home/tom/Entwicklung/SIM Python/main.py",
 		"/home/tom/Entwicklung/SIM Python/module/database.py",
-		"/home/tom/Entwicklung/SIM Python/scan.py",
+		"/home/tom/Entwicklung/SIM Python/module/media.py",
+		"/home/tom/Entwicklung/SIM Python/module/__init__.py",
 		"/home/tom/Entwicklung/SIM Python/create/image.ini",
+		"/home/tom/Entwicklung/SIM Python/scan.py",
 		"/home/tom/Entwicklung/SIM Python/database.py",
 		"/home/tom/Entwicklung/SIM Python/plugin/sqlite.py",
 		"/home/tom/Entwicklung/SIM Python/jpg.txt",
@@ -165,6 +179,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"self._root",
+			"imageRoot",
+			"exif",
 			"_metadata",
 			"print",
 			"\"",
@@ -178,6 +195,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"root",
+			"albumRoot",
+			"_exif",
 			"exif",
 			"",
 			":",
@@ -193,7 +213,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -201,15 +221,15 @@
 					"file": "main.py",
 					"settings":
 					{
-						"buffer_size": 387,
+						"buffer_size": 501,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								99,
-								99
+								116,
+								116
 							]
 						],
 						"settings":
@@ -224,18 +244,45 @@
 				},
 				{
 					"buffer": 1,
-					"file": "module/scan.py",
+					"file": "module/database.py",
 					"settings":
 					{
-						"buffer_size": 816,
+						"buffer_size": 3344,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								129,
-								129
+								1658,
+								1658
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1015.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "module/scan.py",
+					"settings":
+					{
+						"buffer_size": 1655,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1652,
+								1652
 							]
 						],
 						"settings":
@@ -250,53 +297,28 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "module/media.py",
 					"settings":
 					{
-						"buffer_size": 1335,
+						"buffer_size": 1773,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1191,
-								1191
+								1720,
+								1720
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 259.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "module/exif.py",
-					"settings":
-					{
-						"buffer_size": 864,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								815,
-								815
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 433.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -306,46 +328,20 @@
 					"file": "create/image.ini",
 					"settings":
 					{
-						"buffer_size": 455,
+						"buffer_size": 453,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								224,
-								224
+								166,
+								166
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "module/__init__.py",
-					"settings":
-					{
-						"buffer_size": 44,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								44,
-								44
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,

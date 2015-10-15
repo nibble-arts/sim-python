@@ -1,1 +1,1 @@
-__all__ = ["database","scan","exif","media"]
+__all__ = ["database","scan","exif","media","album"]
