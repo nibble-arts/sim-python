@@ -62,7 +62,6 @@ class Scanner:
 				else:
 					# print "image: ",f
 					m = media.Media(root=self._root,dir=subdir,name=f)
-					# print m.get()
 
 					if (m.get()):
 						if verbose:
@@ -92,6 +91,12 @@ class Scanner:
 							self._insCnt += 1
 
 						localCnt += 1
+
+						# link keywords
+						# print m.keywords()
+						for key in m.keywords():
+							self._db.exists("keyword",{"term",key})
+							print key
 
 
 			if verbose:

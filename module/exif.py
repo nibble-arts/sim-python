@@ -1,14 +1,16 @@
 # encoding=utf-8
 """ class for exif data extraction """
+import sys
 from PIL import Image
 from PIL.ExifTags import TAGS
-# from iptcinfo import IPTCInfo
+from extern import iptcinfo
 
 # import pillow
 
 class Exif:
 
 	_exif = {}
+	_iptc = {}
 
 	def __init__(self,path):
 
@@ -48,17 +50,18 @@ class Exif:
 
 
 						# insert rest of exif in string
-						else:
-							exifList.append(TAGS.get(k) + ":" + str(v))
+						# else:
+						# 	exifList.append(TAGS.get(k) + ":" + unicode(v))
 
 				#TODO pipe | separated list of all other exif tags
 				# encoding problem
 				# self._exif["exif"] = "|".join(exifList)
+		self._iptc = iptcinfo.IPTCInfo(path,inp_charset="utf-8",out_charset="utf-8")
 
 
 	# get exif value by index
 	# if no index, return dictionary
-	def get(self,index = ""):
+	def exif(self,index = ""):
 		if index:
 			# return index value
 			if index in self._exif.keys():
@@ -71,4 +74,10 @@ class Exif:
 		# return exif dictionary
 		else:
 			return self._exif
+
+
+	# get exif value by index
+	# if no index, return dictionary
+	def keywords(self):
+			return self._iptc.keywords
 

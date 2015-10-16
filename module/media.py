@@ -12,6 +12,9 @@ class Media:
 	_ident = ["dirname","basename","extension","type","size","original_datetime","height","width"]
 
 	_metadata = {}
+
+	_keywords = []
+
 	_root = ""
 	_dir = ""
 
@@ -35,6 +38,11 @@ class Media:
 			return False
 
 
+	# get keywords
+	def keywords(self):
+		return self._keywords
+
+	
 	# get different definition
 	def ident(self):
 		ret = {}
@@ -75,7 +83,10 @@ class Media:
 					if extension == "jpg" or extension == "jpeg" or extension == "tif" or extension == "tiff":
 						e = exif.Exif(path)
 
-						self._metadata.update(e.get())
+						self._metadata.update(e.exif())
+
+						self._keywords = e.keywords()
+
 
 				# if no size => no image
 				else:
