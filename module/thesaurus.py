@@ -32,7 +32,7 @@ class Thesaurus:
 
 			# term already exist => check mapping
 			else:
-				self.set_map(term=termid,keyword=term[0])
+				self.set_map(term=termid,keyword=termid)
 				pass
 
 
