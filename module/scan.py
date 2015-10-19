@@ -13,7 +13,7 @@ class Scanner:
 	_root = False
 	_albumID = 0
 	_db = ""
-	_insCnt = _updCnt = _skipCnt = 0
+	_insCnt = _updCnt = _skipCnt = _dirCnt = 0
 
 	def __init__(self,database,root,albumName):
 		self._db = database
@@ -43,8 +43,11 @@ class Scanner:
 		# if subdir exists, start scan
 		if os.path.exists(self._root+subdir):
 
+			fileCnt = len(os.listdir(self._root+subdir))
+
 			if verbose:
-				print "scan directory ",self._root+subdir
+				print ("scan directory ",self._root+subdir)
+				self._dirCnt += 1
 
 			# loop directory
 			localCnt = 0
@@ -60,22 +63,33 @@ class Scanner:
 				# get image from file
 				# insert into database
 				else:
-					# print "image: ",f
 					m = media.Media(root=self._root,dir=subdir,name=f)
 
 					if (m.get()):
 						if verbose:
-							stdout.write("\rfile: %s" % f)
+							percent = int((10*localCnt) / fileCnt)
+
+							stdout.write("\r[")
+							stdout.write("-" * int(percent))
+							stdout.write(" " * int(10 - percent))
+							stdout.write("]")
+
+							stdout.write(" file: %s" % f)
 							stdout.flush()
 
-						id = self._db.exists("image",m.ident())
+							# stdout.write("\rfile: %s" % f)
+							# stdout.flush()
+							pass
+
+						imageid = self._db.exists("image",m.ident())
+
 
 						# record exists
-						if (id):
+						if (imageid):
 							# modification time differs => update
-							if int(m.get()["mtime"]) != int(self._db.get("image",id)["mtime"]):
+							if int(m.get()["mtime"]) != int(self._db.get("image",imageid)["mtime"]):
 								
-								self._db.update_by_id("image",id,m.get())
+								self._db.update_by_id("image",imageid,m.get())
 								self._updCnt += 1
 							else:
 								self._skipCnt += 1
@@ -87,21 +101,34 @@ class Scanner:
 							data["album"] = self._albumID
 
 							# print data
-							self._db.insert("image",data)
+							imageid = self._db.insert("image",data)
 							self._insCnt += 1
 
 						localCnt += 1
 
+						
 						# link keywords
-						# print m.keywords()
-						for key in m.keywords():
-							self._db.exists("keyword",{"term",key})
-							print key
+						if m.keywords():
+							for key in m.keywords():
+								keyid = self._db.exists("keyword",{"term":key})
+
+								# keyword dont exist
+								# insert keyword an set link
+								if not keyid:
+									keyid = self._db.insert("keyword",{"term":key})
+									self._db.insert("keyword_use",{"term":keyid,"image":imageid})
+
+								# keyword exist
+								else:
+
+									# set link if dont exist
+									if not self._db.exists("keyword_use",{"term":keyid,"image":imageid}):
+										self._db.insert("keyword_use",{"term":keyid,"image":imageid})
 
 
 			if verbose:
-				print " => ",localCnt," images indexed"
-				print self._skipCnt," skipped /",self._insCnt," inserted /",self._updCnt," updated /",self._insCnt+self._updCnt+self._skipCnt," processed"
+				print (" => ",localCnt," images indexed")
+				print (self._dirCnt," dirs with ",self._skipCnt," skipped /",self._insCnt," inserted /",self._updCnt," updated /",self._insCnt+self._updCnt+self._skipCnt," files processed")
 
 	def len(self):
 		return self._insCnt+self._updCnt

@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"u",
+				"utf-8"
+			],
+			[
+				"_",
+				"_exif"
+			],
+			[
+				"albu",
+				"albumName"
+			],
+			[
+				"root",
+				"_root"
+			],
+			[
+				"datapath",
+				"datapath"
+			],
+			[
+				"recur",
+				"recurse"
+			],
+			[
 				"def",
 				"def	Function"
 			],
@@ -14,10 +38,6 @@
 			[
 				"_dict",
 				"_dict2where"
-			],
-			[
-				"_",
-				"_metadata"
 			],
 			[
 				"key",
@@ -83,46 +103,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "main.py",
-			"settings":
-			{
-				"buffer_size": 501,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/database.py",
-			"settings":
-			{
-				"buffer_size": 3344,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/scan.py",
-			"settings":
-			{
-				"buffer_size": 1655,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "module/media.py",
-			"settings":
-			{
-				"buffer_size": 1773,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "create/image.ini",
-			"settings":
-			{
-				"buffer_size": 453,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "Packages/Python/Python.sublime-build",
 	"command_palette":
@@ -148,13 +128,16 @@
 	},
 	"file_history":
 	[
-		"/home/tom/Entwicklung/SIM Python/module/exif.py",
-		"/home/tom/Entwicklung/SIM Python/module/scan.py",
-		"/home/tom/Entwicklung/SIM Python/main.py",
-		"/home/tom/Entwicklung/SIM Python/module/database.py",
 		"/home/tom/Entwicklung/SIM Python/module/media.py",
-		"/home/tom/Entwicklung/SIM Python/module/__init__.py",
+		"/home/tom/Entwicklung/SIM Python/module/scan.py",
+		"/home/tom/Entwicklung/SIM Python/module/database.py",
+		"/home/tom/Entwicklung/SIM Python/module/album.py",
+		"/home/tom/Entwicklung/SIM Python/module/exif.py",
+		"/home/tom/Entwicklung/SIM Python/extern/iptcinfo.py",
+		"/home/tom/Entwicklung/SIM Python/extern/__init__.py",
 		"/home/tom/Entwicklung/SIM Python/create/image.ini",
+		"/home/tom/Entwicklung/SIM Python/main.py",
+		"/home/tom/Entwicklung/SIM Python/module/__init__.py",
 		"/home/tom/Entwicklung/SIM Python/scan.py",
 		"/home/tom/Entwicklung/SIM Python/database.py",
 		"/home/tom/Entwicklung/SIM Python/plugin/sqlite.py",
@@ -179,6 +162,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"keywords",
+			"iptcinfo",
+			"sys",
+			"True",
+			"root",
+			"_root",
 			"self._root",
 			"imageRoot",
 			"exif",
@@ -195,6 +184,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"subdir",
 			"root",
 			"albumRoot",
 			"_exif",
@@ -213,142 +203,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "main.py",
-					"settings":
-					{
-						"buffer_size": 501,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								116,
-								116
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "module/database.py",
-					"settings":
-					{
-						"buffer_size": 3344,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1658,
-								1658
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1015.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "module/scan.py",
-					"settings":
-					{
-						"buffer_size": 1655,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1652,
-								1652
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "module/media.py",
-					"settings":
-					{
-						"buffer_size": 1773,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1720,
-								1720
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 433.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "create/image.ini",
-					"settings":
-					{
-						"buffer_size": 453,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								166,
-								166
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -397,6 +253,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"",
+				"/home/tom/Entwicklung/SIM Python/module/album.py"
+			]
 		],
 		"width": 0.0
 	},

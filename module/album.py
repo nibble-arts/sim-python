@@ -19,7 +19,7 @@ class Album:
 		# create new album
 		if not id:
 			if not root:
-				print "no album root directory found; use --album-root"
+				print ("no album root directory found; use --album-root")
 				sys.exit()
 
 			id = self._db.insert("album",{"root":root,"name":self._albumName})

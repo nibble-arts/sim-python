@@ -1,7 +1,7 @@
 """ media class identifies media
 and loades corresponding metadata """
 
-from module import exif
+from module import metadata
 import os.path,sys
 
 
@@ -25,7 +25,7 @@ class Media:
 
 		# valid type found -> add dirname
 		if (len(self._metadata) > 1):
-			self._metadata["dirname"] = unicode(dir)
+			self._metadata["dirname"] = str(dir)
 
 		pass
 
@@ -81,7 +81,7 @@ class Media:
 
 					# get exif data from jpg and tif
 					if extension == "jpg" or extension == "jpeg" or extension == "tif" or extension == "tiff":
-						e = exif.Exif(path)
+						e = metadata.Exif(path)
 
 						self._metadata.update(e.exif())
 

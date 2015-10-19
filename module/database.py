@@ -23,6 +23,16 @@ class Database:
 		pass
 
 	
+	# connect to database
+	def connect(self):
+		if not self._dbRoot.endswith("/"):
+			self._dbRoot += "/"
+
+		# connect to sqlite db
+		self._conn = sqlite3.connect(self._dbRoot + self._dbName + ".db")
+		self._c = self._conn.cursor()
+
+
 	# create databse with tables
 	def create(self,structure):
 
@@ -34,31 +44,28 @@ class Database:
 		self._conn = sqlite3.connect(self._dbRoot + self._dbName + ".db")
 		self._c = self._conn.cursor()
 
-		# loop all tables
-		for s in structure.sections():
-			query = []
+		with self._conn:
+			# loop all tables
+			for s in structure.sections():
+				query = []
 
+				# loop all fields
+				# table definition block
+				table = []
 
-			# loop all fields
-			# table definition block
-			table = []
+				for field in structure.items(s):
+					table.append(field[0])
 
-			for field in structure.items(s):
-				table.append(field[0])
+					query.append(" ".join(field))
 
-				query.append(" ".join(field))
+				self._tables[s] = table
 
-			self._tables[s] = table
+				# create query string
+				query = "CREATE TABLE IF NOT EXISTS " + s + " (" + ",".join(query) + ");"
+				self._c.execute(query)
 
-			# query.append(table)
-
-			# create query string
-			query = "CREATE TABLE IF NOT EXISTS " + s + " (" + ",".join(query) + ");"
-			self._c.execute(query)
-
-		# commit changes in the database
-		self._conn.commit()
-		# conn.close()
+			# commit changes in the database
+			self._conn.commit()
 
 
 	# insert data in table
@@ -86,7 +93,6 @@ class Database:
 
 	# if dataset exists, return id 
 	def exists(self,table,data):
-
 		query = "SELECT id from " + table + " " + self._dict2where(data)
 		self._c.execute(query)
 
@@ -137,18 +143,17 @@ class Database:
 		_values = []
 
 		for value in data.values():
-			_values.append("'" + unicode(value) + "'")
+			_values.append("'" + str(value) + "'")
 
 		return "(" + fields + ") VALUES (" + ",".join(_values) + ")"
 
 
 	# create where from dictionary
 	def _dict2where(self,data):
-
 		_values = []
 
 		for key in data:
-			_values.append(key + "='" + unicode(data[key]) + "'")
+			_values.append(key + "='" + str(data[key]) + "'")
 
 		return "where "+" and ".join(_values)
 
@@ -159,6 +164,6 @@ class Database:
 		_values = []
 
 		for key in data:
-			_values.append(key + "='" + unicode(data[key]) + "'")
+			_values.append(key + "='" + str(data[key]) + "'")
 
 		return "SET " + ",".join(_values)
