@@ -2,8 +2,8 @@
 dive into subdirectories with maximal depth
 depth = 0: use maximal depth  """
 
-import os,sys
-from module import media,album
+import os,sys,configparser
+from module import media,album,database
 from sys import stdout
 
 class Scanner:
@@ -15,16 +15,21 @@ class Scanner:
 	_db = ""
 	_insCnt = _updCnt = _skipCnt = _dirCnt = 0
 
-	def __init__(self,database,root,albumName):
-		self._db = database
-		
-		self._album = album.Album(database=database,root=root,albumName=albumName)
+	def __init__(self,album):
+
+		# load image database definition
+		config = configparser.RawConfigParser(allow_no_value = True)
+		config.read("create/image.ini")
+
+		# create or load image database
+		self._db = database.Database(album.dataPath(),album.name())
+		self._db.create(config)
 
 		# set album id
-		self._albumID = self._album.id()
+		self._albumID = album.id()
 
 		# get album root
-		self._root = self._album.root()
+		self._root = album.root()
 
 		if not self._root.endswith("/"):
 			self._root += "/"

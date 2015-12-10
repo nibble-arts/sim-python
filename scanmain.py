@@ -1,6 +1,6 @@
 # encoding=utf-8
 # SIM main programm
-import pickle, configparser
+import sys, pickle, configparser
 
 # from module import *
 from module import *
@@ -33,14 +33,39 @@ parser.add_argument("--album-root",dest="albumRoot",type=str,help="set album roo
 parser.add_argument("-s","--start",dest="scanStart",type=str,help="scan start path in album root")
 
 parser.add_argument("--db-path",dest="datapath",type=str,help="set database path; default=data/",default="data/")
+parser.add_argument("--thumb-path",dest="thumbpath",type=str,help="set thumbnail path; default=thumb/",default="thumb/")
+parser.add_argument("--thumb-size",dest="thumbsize",type=str,help="set thumbnail size; default=80",default="80")
 
 
 args = vars(parser.parse_args())
 
-
-
 # set args
 verbose = args["verbose"]
+albumName = args["album"]
+dataPath = args["datapath"]
+
+# if args["root"]:
+# 	pass
+
+'''
+albumRoot = args["albumRoot"]
+albumName = args["album"]
+
+dataPath = args["datapath"]
+thumbPath = args["thumbpath"]
+thumbSize = args["thumbsize"]
+'''
+
+
+# load album database
+# load album or add it
+#   if not exist --album-root is necessarry
+#   if exist --album-root changes root of album
+
+album = album.Album(albumName,args,verbose)
+print (album.album())
+
+
 
 # set recursion level
 if args["recurse"]:
@@ -55,28 +80,14 @@ if args["recurse"]:
 else:
 	depth = 1
 
-
-# if args["root"]:
-# 	pass
-
-albumRoot = args["albumRoot"]
-albumName = args["album"]
-
-dataPath = args["datapath"]
 scanStart = args["scanStart"]
 
 
+# create scanner
+s = scan.Scanner(album)
 
 
-# load create config
-config = configparser.RawConfigParser(allow_no_value = True)
-config.read("create/image.ini")
-
-db = database.Database(dataPath,albumName)
-db.create(config)
-
-s = scan.Scanner(db,root=albumRoot,albumName=albumName)
-
+# start scan
 try:
 	s.scan(subdir=scanStart,depth=depth,verbose=verbose)
 
@@ -84,4 +95,4 @@ try:
 		print ("overall images indexed: ",s.len())
 
 except KeyboardInterrupt:
-	print ("indexing apported")
+	print ("\n\nindexing apported")

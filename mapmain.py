@@ -77,5 +77,5 @@ try:
 		print ("mapping finished")
 
 except KeyboardInterrupt:
-	print ("mapping abborted")
+	print ("\n\nmapping abborted")
 	

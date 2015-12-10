@@ -102,6 +102,7 @@ class Database:
 
 		if len(data):
 			return data[0][0]
+		return False
 
 
 	# get data from table by id
