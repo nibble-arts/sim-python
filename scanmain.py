@@ -1,3 +1,5 @@
+# encoding=utf-8
+# SIM main programm
 import pickle, configparser
 
 # from module import *
@@ -54,7 +56,6 @@ else:
 	depth = 1
 
 
-print (depth)
 # if args["root"]:
 # 	pass
 
@@ -75,7 +76,12 @@ db = database.Database(dataPath,albumName)
 db.create(config)
 
 s = scan.Scanner(db,root=albumRoot,albumName=albumName)
-s.scan(subdir=scanStart,depth=depth,verbose=verbose)
 
-if verbose:
-	print ("overall images indexed: ",s.len())
+try:
+	s.scan(subdir=scanStart,depth=depth,verbose=verbose)
+
+	if verbose:
+		print ("overall images indexed: ",s.len())
+
+except KeyboardInterrupt:
+	print ("indexing apported")

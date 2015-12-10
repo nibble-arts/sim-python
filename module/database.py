@@ -33,16 +33,18 @@ class Database:
 		self._c = self._conn.cursor()
 
 
-	# create databse with tables
+	# create or open databse with tables
 	def create(self,structure):
 
 		# add / to root path if missing
 		if not self._dbRoot.endswith("/"):
 			self._dbRoot += "/"
 
+
 		# create sqlite db
 		self._conn = sqlite3.connect(self._dbRoot + self._dbName + ".db")
 		self._c = self._conn.cursor()
+
 
 		with self._conn:
 			# loop all tables
@@ -123,6 +125,11 @@ class Database:
 			self._c.execute(query)
 			self._conn.commit()
 	
+
+	# get a result from a query
+	def fetch(self):
+		return self._c.fetchone()
+
 
 	# return db name
 	def dbName():

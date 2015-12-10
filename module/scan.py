@@ -42,6 +42,7 @@ class Scanner:
 
 		# if subdir exists, start scan
 		if os.path.exists(self._root+subdir):
+			print (depth)
 
 			fileCnt = len(os.listdir(self._root+subdir))
 
@@ -111,18 +112,20 @@ class Scanner:
 						if m.keywords():
 							for key in m.keywords():
 								keyid = self._db.exists("keyword",{"term":key})
-
+								
+#								print ("albumID",albumID)
+								
 								# keyword dont exist
 								# insert keyword an set link
 								if not keyid:
-									keyid = self._db.insert("keyword",{"term":key})
+									keyid = self._db.insert("keyword",{"term":key,"album":self._albumID})
 									self._db.insert("keyword_use",{"term":keyid,"image":imageid})
 
 								# keyword exist
 								else:
 
 									# set link if dont exist
-									if not self._db.exists("keyword_use",{"term":keyid,"image":imageid}):
+									if not self._db.exists("keyword_use",{"term":keyid}):
 										self._db.insert("keyword_use",{"term":keyid,"image":imageid})
 
 

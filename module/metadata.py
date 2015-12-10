@@ -14,7 +14,7 @@ class Exif:
 		metadata = pyexiv2.ImageMetadata(path)
 		metadata.read()
 
-		try
+		# try:
 		# print (metadata.iptc_keys)
  
 		# get exif data

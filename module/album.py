@@ -1,5 +1,5 @@
 ''' album class '''
-
+import sys
 
 class Album:
 	''' create or load the album metadata '''
@@ -18,6 +18,7 @@ class Album:
 
 		# create new album
 		if not id:
+
 			if not root:
 				print ("no album root directory found; use --album-root")
 				sys.exit()
