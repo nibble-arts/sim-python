@@ -20,6 +20,7 @@ class Database:
 
 		self._dbRoot = root
 		self._dbName = name
+
 		pass
 
 	
@@ -28,6 +29,7 @@ class Database:
 		if not self._dbRoot.endswith("/"):
 			self._dbRoot += "/"
 
+		print(self._dbRoot + self._dbName + ".db")
 		# connect to sqlite db
 		self._conn = sqlite3.connect(self._dbRoot + self._dbName + ".db")
 		self._c = self._conn.cursor()
@@ -108,23 +110,27 @@ class Database:
 	# get data from table by id
 	# return a dictionary of the fields
 	def get(self,table,id):
+
 		query = "SELECT * FROM " + table + " WHERE id='" + str(id) + "'"
+
 		self.select(query)
 		data = self._c.fetchall()
 
 		ret = {}
 
-		for x,y in zip(data[0],self._tables[table]):
-			ret[y] = x
+		if (len(data) and len(data[0]) == len(self._tables[table])):
+			for x,y in zip(data[0],self._tables[table]):
+				ret[y] = x
 
 		return ret
 
 
 	# send select query
 	def select(self,query):
+
 		if query:
 			self._c.execute(query)
-			self._conn.commit()
+#			self._conn.commit()
 	
 
 	# get a result from a query

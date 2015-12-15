@@ -70,8 +70,6 @@ class Thesaurus:
 
 		data = self._db.get("thesaurus",id)
 
-		print(data)
-
 		return data
 
 
