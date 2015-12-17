@@ -1,12 +1,22 @@
 from http.server import BaseHTTPRequestHandler
-from module import database, thesaurus
-import pickle, configparser
+from module import database, thesaurus, template
+import pickle, configparser, dicttoxml
 from urllib.parse import urlparse,parse_qs
+
 
 
 class MyServer(BaseHTTPRequestHandler):
 
+    def do_HEAD(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+
+
     def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
 
         url = urlparse(self.path)
         path = url.path
@@ -15,14 +25,6 @@ class MyServer(BaseHTTPRequestHandler):
         print (param)
         if (path.endswith("index.html")):
 
-            self.html_open("SWIM-webcontroll")
-
-            # send reply
-            self.html("<h2>SWIM</h2>")
-#            self.html("<p>page path: %s</p>" % path)
-
-#            for key in param:
-#                self.html("<p>%s = %s" % (key,param[key]))
 
     		# load create config
             config = configparser.RawConfigParser(allow_no_value = True)
@@ -37,18 +39,18 @@ class MyServer(BaseHTTPRequestHandler):
             if "id" in param:
                 id = param["id"][0]
 
-#                self.html("<p>Get Term id=%s" % id)
-
                 db = database.Database(dataPath,thesname)
                 db.create(config)
 
-                thes = thesaurus.Thesaurus(thesdb=db,thesname="familie_thes",album=albumName,verbose=True)
+                thes = thesaurus.Thesaurus(thesdb=db,thesname="familie_thes",album=albumName,verbose=False)
                 data = thes.get(id)
 
-                for key in data:
-                    self.html("%s = %s<br>" % (key,data[key]))
+                # load template and transform data
+                xmlData = dicttoxml.dicttoxml(data)
 
-            self.html_close()
+                xsl = template.Template("test")
+                self.html(xsl.transform(xmlData))
+
 
         else:
             self.html_open("page not found")
@@ -61,18 +63,6 @@ class MyServer(BaseHTTPRequestHandler):
         pass
 
 
-    def html_open(self,title):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-
-        self.wfile.write(bytes("<html><head><title>%s</title></head>" % title, "utf-8"))
-
-
-    def html_close(self):
-        self.wfile.write(bytes("</body></html>", "utf-8"))
-
-
     def html(self,string):
-        self.wfile.write(bytes(string, "utf-8"))
+        self.wfile.write(string)
 
