@@ -4,18 +4,23 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:output method="html"/>
+    <xsl:output method="text" indent="no"/>
+    <xsl:strip-space elements="*"/>
 
     <xsl:param name="title"/>
 
-
     <xsl:template match="/">
-        <body>
-            <header>
-                <xsl:value-of select="$title"/>
-            </header>
-            <xsl:apply-templates select="root"/>
-        </body>
+        <html>
+            <head>
+                <title>
+                    <xsl:value-of select="$title"/>
+                </title>
+                <link rel="stylesheet" type="test/css" href="/html/styles.css"/>
+            </head>
+            <body>
+                <xsl:apply-templates select="root"/>
+            </body>
+        </html>
     </xsl:template>
 
 

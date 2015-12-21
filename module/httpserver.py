@@ -1,54 +1,59 @@
-from http.server import BaseHTTPRequestHandler
-from module import parser
-import pickle, configparser, dicttoxml
-from urllib.parse import urlparse,parse_qs
+"""Simple HTTP Server.
+This module builds on BaseHTTPServer by implementing the standard GET
+and HEAD requests in a fairly straightforward manner.
+"""
 
-import mimetypes
+
+
+__version__ = "0.6"
+
+__all__ = ["SimpleHTTPRequestHandler"]
+
+import os
 import posixpath
-import shutil
+import BaseHTTPServer
 import urllib
-import os,io,cgi,sys
+import cgi
+import sys
+import shutil
+import mimetypes
+
+try:
+    from cStringIO import StringIO
+
+except ImportError:
+    from StringIO import StringIO
 
 
-class MyServer(BaseHTTPRequestHandler):
+class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
-    extensions_map = None
-    root = "/html"
-    ctype = None
-    script = None
-    param = None
+    """Simple HTTP request handler with GET and HEAD commands.
 
-    if not mimetypes.inited:
-        mimetypes.init() # try to read system mime.types
+    This serves files from the current directory and any of its
+    subdirectories.  The MIME type for files is determined by
+    calling the .guess_type() method.
 
-    extensions_map = mimetypes.types_map.copy()
-    extensions_map.update({
-        '': 'application/octet-stream', # Default
-        '.py': 'text/plain',
-        '.c': 'text/plain',
-        '.h': 'text/plain',
-        })
+    The GET and HEAD requests are identical except that the HEAD
+    request omits the actual contents of the file.
+    """
+
+    server_version = "SimpleHTTP/" + __version__
+
+
+    def do_GET(self):
+
+        """Serve a GET request."""
+        f = self.send_head()
+        if f:
+            self.copyfile(f, self.wfile)
+            f.close()
+
 
     def do_HEAD(self):
 
         """Serve a HEAD request."""
         f = self.send_head()
-
         if f:
-            f.close()
-
-
-    def do_GET(self):
-        """Serve a GET request."""
-        f = self.send_head()
-
-        # if html, call parser
-        if (self.ctype == "text/html"):
-            #param = parse_qs(url.query)
-            p = parser.Parser(f,self.script,self.param)
-
-        if f:
-            self.copyfile(f, self.wfile)
             f.close()
 
 
@@ -64,13 +69,9 @@ class MyServer(BaseHTTPRequestHandler):
         None, in which case the caller has nothing further to do.
         """
 
-        #self.param = path.split('?')
-
         path = self.translate_path(self.path)
         f = None
 
-
-        # is directory
         if os.path.isdir(path):
             if not self.path.endswith('/'):
 
@@ -91,13 +92,13 @@ class MyServer(BaseHTTPRequestHandler):
             else:
                 return self.list_directory(path)
 
-
-        self.ctype = self.guess_type(path)
+        ctype = self.guess_type(path)
 
         try:
             # Always read in binary mode. Opening files in text mode may cause
             # newline translations, making the actual size of the content
             # transmitted *less* than the content-length!
+
             f = open(path, 'rb')
 
         except IOError:
@@ -105,7 +106,7 @@ class MyServer(BaseHTTPRequestHandler):
             return None
 
         self.send_response(200)
-        self.send_header("Content-type", self.ctype)
+        self.send_header("Content-type", ctype)
 
         fs = os.fstat(f.fileno())
 
@@ -134,9 +135,9 @@ class MyServer(BaseHTTPRequestHandler):
 
         list.sort(key=lambda a: a.lower())
 
-        f = io.StringIO()
+        f = StringIO()
 
-        displaypath = cgi.escape(urllib.parse.unquote(self.path))
+        displaypath = cgi.escape(urllib.unquote(self.path))
 
         f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
         f.write("<html>\n<title>Directory listing for %s</title>\n" % displaypath)
@@ -159,7 +160,7 @@ class MyServer(BaseHTTPRequestHandler):
                 # Note: a link to a directory displays with @ and links with /
 
             f.write('<li><a href="%s">%s</a>\n'
-                    % (urllib.parse.quote(linkname), cgi.escape(displayname)))
+                    % (urllib.quote(linkname), cgi.escape(displayname)))
 
         f.write("</ul>\n<hr>\n</body>\n</html>\n")
 
@@ -183,23 +184,17 @@ class MyServer(BaseHTTPRequestHandler):
         probably be diagnosed.)
         """
 
-        url = urlparse(path)
-        self.param = parse_qs(url.query)
-        path = url.path
-        self.script = path
-
+        # abandon query parameters
+        path = path.split('?',1)[0]
+        path = path.split('#',1)[0]
 
         # Don't forget explicit trailing slash when normalizing. Issue17324
         trailing_slash = path.rstrip().endswith('/')
-
-        path = posixpath.normpath(urllib.parse.unquote(path))
-
+        
+        path = posixpath.normpath(urllib.unquote(path))
         words = path.split('/')
         words = filter(None, words)
         path = os.getcwd()
-
-        # add relative root path
-        path += self.root
 
         for word in words:
             drive, word = os.path.splitdrive(word)
@@ -214,42 +209,6 @@ class MyServer(BaseHTTPRequestHandler):
 
         return path
 
-
-
-    def do_POST(self):
-        pass
-
-
-    def html(self,string):
-        self.wfile.write(bytes(string,"utf-8"))
-
-
-    def guess_type(self, path):
-
-        """Guess the type of a file.
-
-        Argument is a PATH (a filename).
-
-        Return value is a string of the form type/subtype,
-        usable for a MIME Content-type header.
-
-        The default implementation looks the file's extension
-        up in the table self.extensions_map, using application/octet-stream
-        as a default; however it would be permissible (if
-        slow) to look inside the data to make a better guess.
-        """
-
-        base, ext = posixpath.splitext(path)
-
-        if ext in self.extensions_map:
-            return self.extensions_map[ext]
-
-        ext = ext.lower()
-
-        if ext in self.extensions_map:
-            return self.extensions_map[ext]
-        else:
-            return self.extensions_map['']
 
     def copyfile(self, source, outputfile):
 
@@ -267,3 +226,59 @@ class MyServer(BaseHTTPRequestHandler):
         """
 
         shutil.copyfileobj(source, outputfile)
+
+
+    def guess_type(self, path):
+
+        """Guess the type of a file.
+
+        Argument is a PATH (a filename).
+
+        Return value is a string of the form type/subtype,
+        usable for a MIME Content-type header.
+
+        The default implementation looks the file's extension
+        up in the table self.extensions_map, using application/octet-stream
+        as a default; however it would be permissible (if
+        slow) to look inside the data to make a better guess.
+        """
+
+
+        base, ext = posixpath.splitext(path)
+
+        if ext in self.extensions_map:
+            return self.extensions_map[ext]
+
+        ext = ext.lower()
+
+        if ext in self.extensions_map:
+            return self.extensions_map[ext]
+
+        else:
+            return self.extensions_map['']
+
+
+    if not mimetypes.inited:
+        mimetypes.init() # try to read system mime.types
+
+    extensions_map = mimetypes.types_map.copy()
+
+    extensions_map.update({
+        '': 'application/octet-stream', # Default
+        '.py': 'text/plain',
+        '.c': 'text/plain',
+        '.h': 'text/plain',
+        })
+
+
+
+def test(HandlerClass = SimpleHTTPRequestHandler,
+
+         ServerClass = BaseHTTPServer.HTTPServer):
+
+    BaseHTTPServer.test(HandlerClass, ServerClass)
+
+
+
+if __name__ == '__main__':
+    test()
