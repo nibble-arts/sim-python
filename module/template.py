@@ -11,13 +11,23 @@ class Template:
 		self.xsl_filename = "html/"+name+".xsl"
 
 
-	def transform(self,xml):
+	def transform(self,xml,param):
 
 		dom = ET.fromstring(xml)
 		xslt = ET.parse(self.xsl_filename)
 
+		transParam = self.unlist(param)
+		
 		transform = ET.XSLT(xslt)
-
-		result = transform(dom, title="'SWIM'")
+		result = transform(dom, **transParam)
 
 		return ET.tostring(result, pretty_print=True)
+
+
+	def unlist(self,list):
+		newList = {}
+
+		for key in list:
+			newList[key] = "'"+list[key][0]+"'"
+
+		return newList

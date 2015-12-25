@@ -65,6 +65,29 @@ class Thesaurus:
 	# get thesaurus term by id
 	def get (self,id):
 
+		q = '''
+		select t.id,t.term,t.type,t.status,t.thesname,t.scopenote,tb.id as bt_id,tb.term as bt,tn.id as nt_id,tn.term as nt,tr.id as _id,tr.term as rt
+		from thesaurus as t
+
+		left join linking as ls on ls.source=t.id
+		left join thesaurus as tn on ls.destination=tn.id  and ls.type='h'
+
+		left join linking as ld on ld.destination=t.id
+		left join thesaurus as tb on ld.source=tb.id and ld.type='h'
+
+		left join linking as lr on lr.source=t.id or lr.destination=t.id
+		left join thesaurus as tr on lr.destination=tr.id  and lr.type='r'
+		where t.id='1'
+		'''
+
+		self._db.select(q)
+		while True:
+			r = self._db.fetch()
+			if not r:
+				break
+			print (r)
+
+
 		if (self._verbose):
 			print ("get term id",id)
 

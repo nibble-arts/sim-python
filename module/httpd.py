@@ -40,13 +40,20 @@ class MyServer(BaseHTTPRequestHandler):
 
     def do_GET(self):
         """Serve a GET request."""
+
         f = self.send_head()
 
         # if html, call parser
         if (self.ctype == "text/html"):
-            #param = parse_qs(url.query)
-            p = parser.Parser(f,self.script,self.param)
+            p = parser.Parser(self.script,self.param).transform(f)
 
+            # stream dynamic content
+            # transform data
+            if p:
+                self.wfile.write(bytes(p.read(),"utf-8"))
+                return
+
+        # stream static files
         if f:
             self.copyfile(f, self.wfile)
             f.close()
@@ -165,8 +172,11 @@ class MyServer(BaseHTTPRequestHandler):
 
         length = f.tell()
         f.seek(0)
+
         self.send_response(200)
+
         encoding = sys.getfilesystemencoding()
+
         self.send_header("Content-type", "text/html; charset=%s" % encoding)
         self.send_header("Content-Length", str(length))
         self.end_headers()

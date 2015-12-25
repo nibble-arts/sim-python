@@ -1,21 +1,20 @@
-import pickle, configparser, dicttoxml
+import pickle, configparser, dicttoxml, io
 from urllib.parse import urlparse,parse_qs
+from module import database, thesaurus, template
 
 class Parser:
 
 	url = None
 	param = None
 
-	def __init__ (self,data,script,param):
-		print ("init parser")
-
-		print (data)
-		print (param)
-
+	def __init__ (self,script,param):
+		self.script = script
+		self.param = param
 		pass
 
 
-	def transform (self):
+	def transform (self,xml):
+
 	# load create config
 		config = configparser.RawConfigParser(allow_no_value = True)
 		config.read("create/thesaurus.ini")
@@ -24,10 +23,16 @@ class Parser:
 		thesname = "familie_thes"
 		albumName = "familie"
 
+		xml.seek(0)
+		#print (xml.read())
+
+
+		f = io.StringIO()
 
 		# if id => get thesaurus
-		if "id" in param:
-			id = param["id"][0]
+		if "id" in self.param:
+
+			id = self.param["id"][0]
 
 			db = database.Database(dataPath,thesname)
 			db.create(config)
@@ -38,5 +43,14 @@ class Parser:
 			# load template and transform data
 			xmlData = dicttoxml.dicttoxml(data)
 
-			#xsl = template.Template("test")
+			xsl = template.Template("thesaurus")
 			#self.html(xsl.transform(xmlData))
+
+			f.write(str(xsl.transform(xmlData,self.param),"utf-8"))
+
+			f.seek(0)
+
+			return f
+
+		else:
+			return False
