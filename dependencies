@@ -1,0 +1,18 @@
+swim-web.py:
+============
+dics2xml
+
+scan.py:
+========
+poost.python (http://www.boost.org/libs/python/doc/index.html)
+exiv2 (http://www.exiv2.org/)
+
+python-all-dev (≥ 2.6)
+ * scons
+ * libexiv2-dev (≥ 0.19)
+ * libboost-python-dev (≥ 1.35)
+
+https://github.com/roverdotcom/pyexiv2
+
+libexiv2python
+
