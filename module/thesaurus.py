@@ -66,33 +66,51 @@ class Thesaurus:
 	def get (self,id):
 
 		q = '''
-		select t.id,t.term,t.type,t.status,t.thesname,t.scopenote,tb.id as bt_id,tb.term as bt,tn.id as nt_id,tn.term as nt,tr.id as _id,tr.term as rt
+		select t.id,t.term,t.type,t.status,t.thesname,t.scopenote,
+
+		tb.id as bt_id,tb.term as bt,
+		tn.id as nt_id,tn.term as nt,
+		tr.id as rt_id,tr.term as rt,
+		tuf.id as uf_id,tuf.term as uf,
+		tus.id as us_id,tus.term as us
+
 		from thesaurus as t
 
-		left join linking as ls on ls.source=t.id
-		left join thesaurus as tn on ls.destination=tn.id  and ls.type='h'
+		inner join linking as ls on ls.source=t.id
+		inner join thesaurus as tn on ls.destination=tn.id  and ls.type='h'
 
-		left join linking as ld on ld.destination=t.id
-		left join thesaurus as tb on ld.source=tb.id and ld.type='h'
+		inner join linking as ld on ld.destination=t.id
+		inner join thesaurus as tb on ld.source=tb.id and ld.type='h'
 
-		left join linking as lr on lr.source=t.id or lr.destination=t.id
-		left join thesaurus as tr on lr.destination=tr.id  and lr.type='r'
+		inner join linking as lr on lr.source=t.id or lr.destination=t.id
+		inner join thesaurus as tr on lr.destination=tr.id  and lr.type='r'
+		
+		inner join linking as luf on luf.destination=t.id
+		inner join thesaurus as tuf on luf.source=tuf.id  and luf.type='u'
+		
+		inner join linking as lus on lus.source=t.id
+		inner join thesaurus as tus on lus.destination=tus.id  and lus.type='u'
+
 		where t.id='1'
 		'''
 
 		self._db.select(q)
-		while True:
-			r = self._db.fetch()
-			if not r:
-				break
-			print (r)
+
+		r = self._db.fetch()
+		if not r:
+			return False
+
+		# convert retult to dict
+		keys = ("id","term","type","status","thesname","scopenote","bt_id","bt","nt_id","nt","rt_id","rt","uf_id","uf","us_id","us")
+		data =  {}
+		for k,v in zip(keys,r):
+			data[k] = v
 
 
 		if (self._verbose):
 			print ("get term id",id)
 
-		data = self._db.get("thesaurus",id)
-
+		#data = self._db.get("thesaurus",id)
 		return data
 
 

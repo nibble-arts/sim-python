@@ -248,13 +248,13 @@ class MyServer(BaseHTTPRequestHandler):
         as a default; however it would be permissible (if
         slow) to look inside the data to make a better guess.
         """
-
         base, ext = posixpath.splitext(path)
 
         if ext in self.extensions_map:
             return self.extensions_map[ext]
 
         ext = ext.lower()
+
 
         if ext in self.extensions_map:
             return self.extensions_map[ext]

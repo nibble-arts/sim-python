@@ -7,3 +7,15 @@ h2 {
 	color: white;
 	background-color: green;
 }
+
+#term {
+	font-weight: bold;
+}
+
+#bt,#nt,#rt,#us,#uf {
+	font-style: italic;
+}
+
+#sn {
+	font-style: italic;
+}
